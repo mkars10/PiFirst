@@ -15,26 +15,21 @@ def test_speed():
 	return datetime.datetime.now(), ping, download, upload
 
 
-def add_row(dtim, ping, dwn_ld, up_ld):
+def add_row(dtim, ping, download, upload):
 	"""Adds a row to the SQL db"""
-	results = {
-		'datetime': dtime,
-		'ping': ping,
-		'download': dwnld,
-		'upload': up_ld
-		}
+	results = (dtime, ping, download, upload)
 	add_test_results = ("INSERT INTO speed "
 			   "(datetime, ping, download, upload) "
 			   "VALUES (%s, %s, %s, %s)")
 
-	conn = mysql.connector.connect(user='mypi', database='speed')
+	conn = mysql.connector.connect(user='mypi', database='speedtestdb', password='igottheneedforspeed')
 	cursor = conn.cursor()
 
 	# Add the data
 	cursor.execute(add_test_results, results)
 
 	# Commit & close
-	cursor.commit()
+	conn.commit()
 	cursor.close()
 	conn.close()
 
